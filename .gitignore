@@ -6,6 +6,7 @@ venv/
 .env
 data/*
 !data/.gitkeep
+!data/README.md
 *.csv
 *.xlsx
 *.xls
