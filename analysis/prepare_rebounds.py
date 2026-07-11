@@ -47,6 +47,65 @@ fig.savefig(FIGURES / "top_offensive_rebounders.png", dpi=180)
 fig.savefig(FIGURES / "top_offensive_rebounders.svg")
 plt.close(fig)
 
+# Normalize credited offensive rebounds by each player's own shooting volume.
+# This is an activity-adjusted comparison, not a true opportunity rate: a
+# player's rebounds can follow any teammate's miss, not only the player's own.
+shot_attempts = (
+    pbp[pbp["ShotOutcome"].isin(["make", "miss"])]
+    .dropna(subset=["Shooter"])
+    .groupby("Shooter")
+    .size()
+    .rename("field_goal_attempts")
+    .reset_index()
+)
+all_player_rebounds = (
+    offensive.dropna(subset=["Rebounder"])
+    .query("Rebounder != 'Team'")
+    .groupby("Rebounder")
+    .size()
+    .rename("offensive_rebounds")
+    .reset_index()
+)
+normalized_players = (
+    shot_attempts.merge(
+        all_player_rebounds,
+        left_on="Shooter",
+        right_on="Rebounder",
+        how="left",
+    )
+    .drop(columns="Rebounder")
+    .fillna({"offensive_rebounds": 0})
+)
+normalized_players["offensive_rebounds_per_100_fga"] = (
+    100 * normalized_players["offensive_rebounds"]
+    / normalized_players["field_goal_attempts"]
+)
+normalized_players["player"] = normalized_players["Shooter"].str.split(" - ").str[0]
+normalized_players = (
+    normalized_players.query("field_goal_attempts >= 500")
+    .sort_values("offensive_rebounds_per_100_fga", ascending=False)
+    .head(15)
+)
+normalized_players.to_csv(
+    TABLES / "offensive_rebounds_per_100_shot_attempts.csv", index=False
+)
+
+fig, ax = plt.subplots(figsize=(9, 6))
+plot_normalized = normalized_players.sort_values("offensive_rebounds_per_100_fga")
+ax.barh(
+    plot_normalized["player"],
+    plot_normalized["offensive_rebounds_per_100_fga"],
+    color="#0f766e",
+)
+ax.set_title("Offensive rebounds relative to each player's shot volume")
+ax.set_xlabel("Offensive rebounds per 100 field-goal attempts")
+ax.set_ylabel("")
+ax.spines[["top", "right"]].set_visible(False)
+fig.tight_layout()
+fig.savefig(FIGURES / "offensive_rebounds_per_100_shot_attempts.png", dpi=180)
+fig.savefig(FIGURES / "offensive_rebounds_per_100_shot_attempts.svg")
+plt.close(fig)
+
 # A missed shot is paired with the immediately following rebound event when the
 # game and quarter remain unchanged.
 misses = pbp[pbp["ShotOutcome"] == "miss"].copy()
@@ -91,31 +150,6 @@ ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 fig.savefig(FIGURES / "rebound_probability_by_shot_distance.png", dpi=180)
 fig.savefig(FIGURES / "rebound_probability_by_shot_distance.svg")
-plt.close(fig)
-
-quarter_rates = (
-    misses[misses["Quarter"].between(1, 4)]
-    .groupby("Quarter")["offensive_rebound"]
-    .agg(["mean", "count"])
-    .query("count >= 100")
-    .reset_index()
-)
-quarter_rates["offensive_rebound_rate"] = quarter_rates.pop("mean")
-quarter_rates.to_csv(TABLES / "rebound_rate_by_quarter.csv", index=False)
-
-fig, ax = plt.subplots(figsize=(8, 5))
-ax.bar(
-    quarter_rates["Quarter"].astype(str),
-    100 * quarter_rates["offensive_rebound_rate"],
-    color="#0f766e",
-)
-ax.set_title("Offensive-rebound probability by quarter")
-ax.set_xlabel("Quarter")
-ax.set_ylabel("Offensive rebounds after misses (%)")
-ax.spines[["top", "right"]].set_visible(False)
-fig.tight_layout()
-fig.savefig(FIGURES / "rebound_probability_by_quarter.png", dpi=180)
-fig.savefig(FIGURES / "rebound_probability_by_quarter.svg")
 plt.close(fig)
 
 summary = pd.DataFrame(
