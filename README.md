@@ -12,13 +12,9 @@ Offensive rebounding is one of basketball's most valuable—and comparatively un
 
 ## Selected results
 
-![Top offensive rebounders](results/figures/top_offensive_rebounders.svg)
-
-The player ranking excludes team rebounds so the comparison reflects rebounds credited to individual players.
-
 ![Offensive rebounds relative to player shot volume](results/figures/offensive_rebounds_per_100_shot_attempts.svg)
 
-The second view adjusts for how often each player shoots, showing offensive rebounds per 100 field-goal attempts among players with at least 500 attempts. It is an activity-normalized comparison—not a literal conversion rate—because a player can rebound a teammate's miss.
+This view adjusts for how often each player shoots, showing offensive rebounds per 100 field-goal attempts among players with at least 500 attempts. It is an activity-normalized comparison—not a literal conversion rate—because a player can rebound a teammate's miss.
 
 ![Offensive rebound probability by shot distance](results/figures/rebound_probability_by_shot_distance.svg)
 
