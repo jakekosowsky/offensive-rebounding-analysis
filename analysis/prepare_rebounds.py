@@ -23,30 +23,6 @@ pbp = pd.read_csv(SOURCE, usecols=columns)
 rebounds = pbp[pbp["ReboundType"].isin(["offensive", "defensive"])].copy()
 offensive = rebounds[rebounds["ReboundType"] == "offensive"].copy()
 
-player_totals = (
-    offensive.dropna(subset=["Rebounder"])
-    .query("Rebounder != 'Team'")
-    .groupby("Rebounder")
-    .size()
-    .sort_values(ascending=False)
-    .head(15)
-    .rename("offensive_rebounds")
-    .reset_index()
-)
-player_totals.to_csv(TABLES / "top_offensive_rebounders.csv", index=False)
-
-fig, ax = plt.subplots(figsize=(9, 6))
-plot_players = player_totals.sort_values("offensive_rebounds")
-ax.barh(plot_players["Rebounder"], plot_players["offensive_rebounds"], color="#2563eb")
-ax.set_title("Players generating the most second-chance opportunities")
-ax.set_xlabel("Offensive rebounds")
-ax.set_ylabel("")
-ax.spines[["top", "right"]].set_visible(False)
-fig.tight_layout()
-fig.savefig(FIGURES / "top_offensive_rebounders.png", dpi=180)
-fig.savefig(FIGURES / "top_offensive_rebounders.svg")
-plt.close(fig)
-
 # Normalize credited offensive rebounds by each player's own shooting volume.
 # This is an activity-adjusted comparison, not a true opportunity rate: a
 # player's rebounds can follow any teammate's miss, not only the player's own.
