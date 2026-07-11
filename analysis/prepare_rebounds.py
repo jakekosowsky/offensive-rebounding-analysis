@@ -7,8 +7,9 @@ import numpy as np
 import pandas as pd
 
 
-SOURCE = Path("/Users/JakeKosowsky/NBA Model/2019-20_pbp.csv")
-OUTPUT = Path("outputs/github-portfolio/offensive-rebounding-analysis")
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / "data" / "2019-20_pbp.csv"
+OUTPUT = ROOT
 FIGURES = OUTPUT / "results" / "figures"
 TABLES = OUTPUT / "results" / "tables"
 FIGURES.mkdir(parents=True, exist_ok=True)
