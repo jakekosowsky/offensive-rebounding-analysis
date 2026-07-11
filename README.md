@@ -21,7 +21,7 @@ This view adjusts for how often each player shoots, showing offensive rebounds p
 
 Misses near the basket produced offensive rebounds more frequently than most mid-range and three-point misses. Mid-range attempts are sneaky costly: they return only two points when made, while misses in these distance bands also produced some of the lowest offensive-rebound probabilities in the sample. Shot value and the chance of recovering a miss therefore point in the same direction.
 
-![Rebound-location density after missed three-point attempts](results/figures/rebound_location_heatmap.png)
+<img width="516" height="347" alt="Rebound-location density after missed three-point attempts" src="https://github.com/user-attachments/assets/c5937236-8d58-4118-a65d-2298a2be8d8a" />
 
 The tracking-data view adds the spatial side of the question. Hotter areas show where credited rebounders were positioned near rim contact after missed three-point attempts. The concentration around the paint makes the recovery zone visible, while the spread across the lane shows that long shots do not produce one deterministic rebound path. This is a map of rebounder locations—not the ball's literal flight path.
 
