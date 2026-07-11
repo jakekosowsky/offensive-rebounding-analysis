@@ -9,7 +9,7 @@ Offensive rebounding is one of basketball's most valuable—and comparatively un
 - Player-level offensive-rebound production
 - Offensive rebounds normalized by each player's shot volume
 - Rebound probability after misses at different shot distances
-- Tracking-data locations showing where missed threes are recovered
+- Tracking-data locations showing how rebound position changes with shot side
 
 ## Selected results
 
@@ -21,9 +21,11 @@ This view adjusts for how often each player shoots, showing offensive rebounds p
 
 Misses near the basket produced offensive rebounds more frequently than most mid-range and three-point misses. Mid-range attempts are sneaky costly: they return only two points when made, while misses in these distance bands also produced some of the lowest offensive-rebound probabilities in the sample. Shot value and the chance of recovering a miss therefore point in the same direction.
 
-<img width="516" height="347" alt="Rebound-location density after missed three-point attempts" src="https://github.com/user-attachments/assets/c5937236-8d58-4118-a65d-2298a2be8d8a" />
+<img width="1164" alt="Shot origins and directional rebound-location density" src="https://github.com/user-attachments/assets/a15f17b1-e1aa-4a6c-82f7-6987b08625ac" />
 
-The tracking-data view adds the spatial side of the question. Hotter areas show where credited rebounders were positioned near rim contact after missed three-point attempts. The concentration around the paint makes the recovery zone visible, while the spread across the lane shows that long shots do not produce one deterministic rebound path. This is a map of rebounder locations—not the ball's literal flight path.
+The red dots make the shot origin explicit, while the heat density shows the location of the player nearest the rim when the ball reaches it. For missed threes from below the centerline, 71.4% of those nearest-rim positions were above it. For shots from above the centerline, 72.1% were below it. In other words, the likely recovery position shifts to the opposite side of the lane.
+
+This is a player-position proxy for where a rebound can be secured—not a literal map of the ball's flight and not a claim that the nearest player was always credited with the rebound.
 
 Together, the analyses separate two parts of generating a second chance: the shot context that changes whether an offensive rebound occurs, and the floor position from which the rebound is recovered. The underlying model also considers shooter location, spacing near the rim, which team has the closest player, player movement between release and rim contact, and historical rebounding performance.
 
@@ -31,8 +33,8 @@ Together, the analyses separate two parts of generating a second chance: the sho
 
 ```text
 analysis/
-  prepare_rebounds.py          play-by-play linking and figure generation
-  rebound_location_heatmap.R  tracking-data density visualization
+  prepare_rebounds.py             play-by-play linking and figure generation
+  directional_rebound_heatmap.py tracking-data density visualization
 data/
   README.md                    source-data notes
 notebooks/
@@ -44,8 +46,8 @@ results/
 
 ## Methods
 
-Missed field goals are linked to the following rebound event within the same game segment. The play-by-play analysis compares offensive-rebound rates across shot-distance bands and normalizes player totals by each player's field-goal-attempt volume. A separate player-tracking sample maps the credited rebounder's coordinates near rim contact after missed three-point attempts. Raw tracking data are not included in the repository.
+Missed field goals are linked to the following rebound event within the same game segment. The play-by-play analysis compares offensive-rebound rates across shot-distance bands and normalizes player totals by each player's field-goal-attempt volume. A separate tracking sample identifies the shooter's location at release and the player closest to the rim at rim contact for 55,631 side-location missed threes. Raw tracking data are not included in the repository.
 
 ## Tools
 
-Python · R · pandas · NumPy · Matplotlib · ggplot2 · Jupyter
+Python · pandas · NumPy · SciPy · Matplotlib · Jupyter
