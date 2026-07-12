@@ -13,10 +13,6 @@ Offensive rebounding is one of basketball's most valuable—and comparatively un
 
 ## Selected results
 
-![Offensive rebounds relative to player shot volume](results/figures/offensive_rebounds_per_100_shot_attempts.svg)
-
-This view adjusts for how often each player shoots, showing offensive rebounds per 100 field-goal attempts among players with at least 500 attempts. It is an activity-normalized comparison—not a literal conversion rate—because a player can rebound a teammate's miss.
-
 ![Offensive rebound probability by shot distance](results/figures/rebound_probability_by_shot_distance.svg)
 
 Misses near the basket produced offensive rebounds more frequently than most mid-range and three-point misses. Mid-range attempts are sneaky costly: they return only two points when made, while misses in these distance bands also produced some of the lowest offensive-rebound probabilities in the sample. Shot value and the chance of recovering a miss therefore point in the same direction.
@@ -28,6 +24,10 @@ The red dots make the shot origin explicit, while the heat density shows the loc
 This is a player-position proxy for where a rebound can be secured—not a literal map of the ball's flight and not a claim that the nearest player was always credited with the rebound.
 
 Together, the analyses separate two parts of generating a second chance: the shot context that changes whether an offensive rebound occurs, and the floor position from which the rebound is recovered. The underlying model also considers shooter location, spacing near the rim, which team has the closest player, player movement between release and rim contact, and historical rebounding performance.
+
+![Offensive rebounds relative to player shot volume](results/figures/offensive_rebounds_per_100_shot_attempts.svg)
+
+This final view shifts from shot context to individual players. It adjusts for how often each player shoots, showing offensive rebounds per 100 field-goal attempts among players with at least 500 attempts. It is an activity-normalized comparison—not a literal conversion rate—because a player can rebound a teammate's miss.
 
 ## Repository structure
 
